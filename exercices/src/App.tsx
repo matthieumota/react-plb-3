@@ -11,10 +11,10 @@ function App() {
   ]
 
   const movies: MovieType[] = [
-    { title: 'Le Parrain', releaseYear: 1972, rating: 9.2 },
-    { title: 'Avatar', releaseYear: 2009, rating: 7.8 },
-    { title: 'Matrix', releaseYear: 1999, rating: 8.7 },
-    { title: 'Titanic', releaseYear: 1997, rating: 4.9 },
+    { id: 1, title: 'Le Parrain', releaseYear: 1972, rating: 9.2 },
+    { id: 2, title: 'Avatar', releaseYear: 2009, rating: 7.8 },
+    { id: 3, title: 'Matrix', releaseYear: 1999, rating: 8.7 },
+    { id: 4, title: 'Titanic', releaseYear: 1997, rating: 4.9 },
   ]
 
   return (

@@ -7,8 +7,8 @@ type MovieListProps = {
 function MovieList({ movies }: MovieListProps) {
   return (
     <div>
-      {movies.map((movie, index) => (
-        <Movie key={index} movie={movie} />
+      {movies.map((movie) => (
+        <Movie key={movie.id} movie={movie} />
       ))}
     </div>
   )
