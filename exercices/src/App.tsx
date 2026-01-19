@@ -10,7 +10,7 @@ function App() {
     { id: 4, name: 'Jean-Paul Sartre', birthDate: '1955-06-21' },
   ]
 
-  const films: MovieType[] = [
+  const movies: MovieType[] = [
     { title: 'Le Parrain', releaseYear: 1972, rating: 9.2 },
     { title: 'Avatar', releaseYear: 2009, rating: 7.8 },
     { title: 'Matrix', releaseYear: 1999, rating: 8.7 },
@@ -27,7 +27,7 @@ function App() {
           ))}
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Films</h2>
-        <MovieList movies={films} />
+        <MovieList movies={movies} />
       </div>
     </div>
   )
