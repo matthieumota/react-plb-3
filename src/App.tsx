@@ -1,4 +1,5 @@
-import Book from "./Book"
+import { useState } from "react"
+import Book, { type Book as BookType } from './Book'
 
 function App() {
   const book = {
@@ -76,14 +77,30 @@ function App() {
     }
   ]
 
+  const [selectedBook, setSelectedBook] = useState<BookType>()
+
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl font-bold text-center text-blue-500 mb-6 mt-6">Bookorama</h1>
 
+        {selectedBook && <div className="flex justify-center mb-4">
+          <div className="w-1/3">
+            <Book
+              book={selectedBook}
+              onSelect={() => setSelectedBook(undefined)}
+            />
+          </div>
+        </div>}
+
         <div className="grid grid-cols-4 gap-4">
           {books.map(b =>
-            <Book key={b.id} book={b} />
+            <Book
+              key={b.id}
+              book={b}
+              onSelect={() => setSelectedBook(selectedBook && selectedBook.id === b.id ? undefined : b)}
+              active={!selectedBook || selectedBook.id !== b.id}
+            />
           )}
         </div>
       </div>
