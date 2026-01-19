@@ -1,6 +1,7 @@
 import Author, { type Author as AuthorType } from './components/Author'
 import MovieList from './components/MovieList'
 import { type Movie as MovieType } from './components/Movie'
+import Counter from './components/Counter'
 
 function App() {
   const authors: AuthorType[] = [
@@ -28,6 +29,12 @@ function App() {
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Films</h2>
         <MovieList movies={movies} />
+
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Compteurs</h2>
+        <Counter />
+        <Counter initialValue={2} />
+        <Counter initialValue={5} maxValue={10} />
+        <Counter maxValue={5} />
       </div>
     </div>
   )
