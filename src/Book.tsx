@@ -25,6 +25,12 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
   const [localBook, setLocalBook] = useState(book)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  // Si on veut garder l'etat editMode et synchroniser localBook
+  if (book !== localBook) {
+    setLocalBook(book)
+    setLike(0)
+  }
+
   if (!active) {
     return
   }
@@ -70,6 +76,10 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
     if (localBook.year < 1900 || localBook.year > 2023) {
       errors.year = `L'année n'est pas correcte`
     }
+
+    // Pour supprimer une clé d'un objet
+    // const { year, ...newErrors } = errors
+    // delete errors.year
 
     setErrors(errors)
 

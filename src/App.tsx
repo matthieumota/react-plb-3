@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Book, { type Book as BookType } from './Book'
 import Button from './Button'
 import BookForm from './BookForm'
+import axios from 'axios'
 
 let nextId = 11
 export const BOOKS = [
@@ -79,8 +80,10 @@ export const BOOKS = [
 
 export const AUTHORS = new Set(BOOKS.map(b => b.author))
 
+let didInit = false
+
 function App() {
-  const [books, setBooks] = useState<BookType[]>(BOOKS)
+  const [books, setBooks] = useState<BookType[]>([])
   const [selectedBook, setSelectedBook] = useState<BookType>()
   const [showForm, setShowForm] = useState(false)
   const [newBook, setNewBook] = useState<BookType>({
@@ -90,6 +93,31 @@ function App() {
     year: 0,
     image: '',
   })
+  const booksFiltered = books.filter(book => book.year >= 1950)
+  const count = books.length
+
+  const loadBooks = async () => {
+    await new Promise(resolve => setTimeout(resolve, 500))
+    const response = await axios.get('http://localhost:3000/books')
+    setBooks(response.data)
+  }
+
+  useEffect(() => {
+    if (!didInit) {
+      didInit = true
+      loadBooks()
+    }
+  }, [])
+
+  const [date, setDate] = useState(new Date())
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDate(new Date())
+      console.log('Tick', new Date())
+    }, 1000)
+
+    return () => clearInterval(timer) // fonction appelée quand le composant est détruit
+  }, [])
 
   const toggleForm = () => {
     setShowForm(!showForm)
@@ -115,12 +143,14 @@ function App() {
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">Bookorama ({books.length})</h1>
+        <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">Bookorama ({count}) ({booksFiltered.length})</h1>
+
+        <p>{date.toLocaleTimeString()}</p>
 
         {selectedBook && <div className="flex justify-center mb-4">
           <div className="w-1/3">
             <Book
-              key={selectedBook.id}
+              // key={selectedBook.id}
               book={selectedBook}
               onSelect={() => setSelectedBook(undefined)}
               onRemove={() => {
