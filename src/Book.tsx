@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react'
 import Button from './Button'
 import { AUTHORS } from './App'
+import { cn } from './utils'
 
 export type Book = {
   id: number
@@ -22,6 +23,7 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
   const [like, setLike] = useState(0)
   const [editMode, setEditMode] = useState(false)
   const [localBook, setLocalBook] = useState(book)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   if (!active) {
     return
@@ -42,8 +44,9 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
   const toggleEdit = () => {
     setEditMode(!editMode)
 
-    if (!editMode) {
+    if (!editMode) { // Reset localBook when entering edit mode
       setLocalBook(book)
+      setErrors({})
     }
   }
 
@@ -53,6 +56,26 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
 
   const handleSave = (event: FormEvent) => {
     event.preventDefault()
+
+    const errors: Record<string, string> = {}
+
+    if (!localBook.title) {
+      errors.title = 'Le titre est obligatoire'
+    }
+
+    if (!localBook.year) {
+      errors.year = `L'année est obligatoire`
+    }
+
+    if (localBook.year < 1900 || localBook.year > 2023) {
+      errors.year = `L'année n'est pas correcte`
+    }
+
+    setErrors(errors)
+
+    if (Object.keys(errors).length > 0) {
+      return // Do not proceed if there are validation errors
+    }
 
     onSave(localBook)
     setEditMode(false)
@@ -68,11 +91,12 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
               <input
                 id="title"
                 type="text"
-                className="border border-gray-300 rounded-md py-1 px-2 w-full"
+                className={cn('border border-gray-300 rounded-md py-1 px-2 w-full', errors.title && 'border-red-500')}
                 value={localBook.title}
                 name="title"
                 onChange={handleChange}
               />
+              {errors.title && <p className="text-red-500">{errors.title}</p>}
             </div>
 
             <div className="mb-2">
@@ -95,11 +119,12 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
               <input
                 id="year"
                 type="number"
-                className="border border-gray-300 rounded-md py-1 px-2 w-full"
+                className={cn('border border-gray-300 rounded-md py-1 px-2 w-full', errors.year && 'border-red-500')}
                 value={localBook.year}
                 name="year"
                 onChange={handleChange}
               />
+              {errors.year && <p className="text-red-500">{errors.year}</p>}
             </div>
 
             <div className="flex gap-2 flex-wrap">
