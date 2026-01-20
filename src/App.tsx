@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useState } from 'react'
 import Book, { type Book as BookType } from './Book'
-import Button from "./Button"
+import Button from './Button'
+import BookForm from './BookForm'
 
 let nextId = 11
 export const BOOKS = [
@@ -75,19 +76,32 @@ export const BOOKS = [
     image: '/assets/la-peste.jpg',
   }
 ]
+
 export const AUTHORS = new Set(BOOKS.map(b => b.author))
 
 function App() {
   const [books, setBooks] = useState<BookType[]>(BOOKS)
   const [selectedBook, setSelectedBook] = useState<BookType>()
+  const [showForm, setShowForm] = useState(false)
+  const [newBook, setNewBook] = useState<BookType>({
+    id: 0,
+    title: '',
+    author: Array.from(AUTHORS)[0],
+    year: 0,
+    image: '',
+  })
+
+  const toggleForm = () => {
+    setShowForm(!showForm)
+  }
 
   const handleAddBook = () => {
-    const randomBook = BOOKS[Math.floor(Math.random() * BOOKS.length)]
-
     setBooks([
       ...books,
-      { ...randomBook, id: nextId++ }
+      { ...newBook, id: nextId++ }
     ])
+    setNewBook({ id: 0, title: '', author: '', year: 0, image: '' })
+    toggleForm()
   }
 
   const handleRemoveBook = (book: BookType) => {
@@ -101,11 +115,12 @@ function App() {
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-blue-500 mb-6 mt-6">Bookorama</h1>
+        <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">Bookorama ({books.length})</h1>
 
         {selectedBook && <div className="flex justify-center mb-4">
           <div className="w-1/3">
             <Book
+              key={selectedBook.id}
               book={selectedBook}
               onSelect={() => setSelectedBook(undefined)}
               onRemove={() => {
@@ -118,23 +133,33 @@ function App() {
         </div>}
 
         <div className="grid grid-cols-4 gap-4">
-          {books.map(b =>
+          {books.map((book) =>
             <Book
-              key={b.id}
-              book={b}
-              onSelect={() => setSelectedBook(selectedBook && selectedBook.id === b.id ? undefined : b)}
-              active={!selectedBook || selectedBook.id !== b.id}
-              onRemove={() => handleRemoveBook(b)}
+              key={book.id}
+              book={book}
+              onSelect={() => setSelectedBook(selectedBook && selectedBook.id === book.id ? undefined : book)}
+              active={!selectedBook || selectedBook.id !== book.id}
+              onRemove={() => handleRemoveBook(book)}
               onSave={handleUpdateBook}
             />
           )}
         </div>
 
-        <div className="text-center py-10">
-          <Button onClick={handleAddBook}>
+        {!showForm && <div className="text-center py-10">
+          <Button onClick={toggleForm}>
             Ajouter un livre
           </Button>
-        </div>
+        </div>}
+
+        {showForm && <div className="mt-4">
+          <pre>{JSON.stringify(newBook, null, 2)}</pre>
+          <BookForm
+            book={newBook}
+            onCancel={toggleForm}
+            onChange={(book: BookType) => setNewBook(book)}
+            onSave={handleAddBook}
+          />
+        </div>}
       </div>
     </div>
   )
