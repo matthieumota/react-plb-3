@@ -72,12 +72,13 @@ function EventListenerChallenge() {
     })
   }
 
-  const deleteBird = (index: number) => {
-    setBirds(birds.filter((_, i) => i !== index))
+  // on peut comparer la reference de l'objet en JS
+  const deleteBird = (bird: any) => {
+    setBirds(birds.filter(b => b !== bird))
   }
 
-  const updateBirdColor = (index: number, newColor: string) => {
-    setBirds(birds.map((bird, i) => i === index ? { ...bird, color: newColor } : bird))
+  const updateBirdColor = (bird: any, newColor: string) => {
+    setBirds(birds.map((b) => b === bird ? { ...b, color: newColor } : b))
   }
 
   return (
@@ -90,9 +91,10 @@ function EventListenerChallenge() {
             <input
               type="text"
               placeholder="Modifier couleur"
-              onChange={(e) => updateBirdColor(index, e.target.value)}
+              value={bird.color}
+              onChange={(e) => updateBirdColor(bird, e.target.value)}
             />
-            <button onClick={() => deleteBird(index)}>Supprimer</button>
+            <button onClick={() => deleteBird(bird)}>Supprimer</button>
           </li>
         ))}
       </ul>
