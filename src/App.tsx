@@ -75,6 +75,7 @@ export const BOOKS = [
     image: '/assets/la-peste.jpg',
   }
 ]
+export const AUTHORS = new Set(BOOKS.map(b => b.author))
 
 function App() {
   const [books, setBooks] = useState<BookType[]>(BOOKS)
@@ -93,6 +94,10 @@ function App() {
     setBooks(books.filter(b => b.id !== book.id))
   }
 
+  const handleUpdateBook = (localBook: BookType) => {
+    setBooks(books.map(b => b.id === localBook.id ? localBook : b))
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
@@ -107,6 +112,7 @@ function App() {
                 handleRemoveBook(selectedBook)
                 setSelectedBook(undefined)
               }}
+              onSave={handleUpdateBook}
             />
           </div>
         </div>}
@@ -119,6 +125,7 @@ function App() {
               onSelect={() => setSelectedBook(selectedBook && selectedBook.id === b.id ? undefined : b)}
               active={!selectedBook || selectedBook.id !== b.id}
               onRemove={() => handleRemoveBook(b)}
+              onSave={handleUpdateBook}
             />
           )}
         </div>
