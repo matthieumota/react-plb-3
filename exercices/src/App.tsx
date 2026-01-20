@@ -3,6 +3,7 @@ import MovieList from './components/MovieList'
 import { type Movie as MovieType } from './components/Movie'
 import Counter from './components/Counter'
 import StateChallenge from './components/StateChallenge'
+import EventListenerChallenge from './components/EventListenerChallenge'
 
 function App() {
   const authors: AuthorType[] = [
@@ -39,6 +40,9 @@ function App() {
 
         <h2 className="text-2xl font-bold text-gray-800 mb-4">State challenge</h2>
         <StateChallenge />
+
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Event Listener challenge</h2>
+        <EventListenerChallenge />
       </div>
     </div>
   )
