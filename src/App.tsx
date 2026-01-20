@@ -83,7 +83,7 @@ export const AUTHORS = new Set(BOOKS.map(b => b.author))
 let didInit = false
 
 function App() {
-  const [books, setBooks] = useState<BookType[]>([])
+  const [books, setBooks] = useState<BookType[]>(BOOKS)
   const [selectedBook, setSelectedBook] = useState<BookType>()
   const [showForm, setShowForm] = useState(false)
   const [newBook, setNewBook] = useState<BookType>({
@@ -109,6 +109,19 @@ function App() {
     }
   }, [])
 
+  const storageItems = () => {
+    try {
+      const data = localStorage.getItem('books')
+      return JSON.parse(data || '[]')
+    } catch {
+      return []
+    }
+  }
+
+  useEffect(() => {
+    setBooks(storageItems())
+  }, [])
+
   const [date, setDate] = useState(new Date())
   useEffect(() => {
     const timer = setInterval(() => {
@@ -130,10 +143,17 @@ function App() {
     ])
     setNewBook({ id: 0, title: '', author: '', year: 0, image: '' })
     toggleForm()
+
+    localStorage.setItem('books', JSON.stringify([
+      ...books,
+      { ...newBook, id: nextId++ }
+    ]))
   }
 
   const handleRemoveBook = (book: BookType) => {
     setBooks(books.filter(b => b.id !== book.id))
+
+    localStorage.setItem('books', JSON.stringify(books.filter(b => b.id !== book.id)))
   }
 
   const handleUpdateBook = (localBook: BookType) => {
