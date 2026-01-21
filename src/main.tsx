@@ -15,8 +15,10 @@ const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: 'a-propos', element: <About /> },
       { path: 'livre/:id', Component: Book },
-    ]
+    ],
+    errorElement: <div>Une erreur est survenue...</div>,
   },
+  { path: '*', Component: () => <h1>404</h1> },
 ])
 
 createRoot(document.getElementById('root')!).render(

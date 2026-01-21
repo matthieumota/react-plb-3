@@ -5,8 +5,22 @@ function App() {
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="max-w-5xl mx-auto">
         <nav className="flex gap-4">
-          <NavLink to="/">Accueil</NavLink>
-          <NavLink to="/a-propos">A propos</NavLink>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `px-3 py-1 rounded ${isActive ? 'bg-blue-500 text-white' : ''}`
+            }
+          >
+            Accueil
+          </NavLink>
+          <NavLink
+            to="/a-propos"
+            className={({ isActive }) =>
+              `px-3 py-1 rounded ${isActive ? 'bg-blue-500 text-white' : ''}`
+            }
+          >
+            A propos
+          </NavLink>
         </nav>
 
         <Outlet />

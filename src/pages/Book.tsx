@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router"
+import { useParams, useSearchParams } from "react-router"
 import axios from "axios"
 import NavLinkButton from "../NavLinkButton"
 import type { Book } from "../Book"
 
 export default function Book() {
-  const { id } = useParams()
+  const { id } = useParams() // /book/:id
+  const [searchParams, setSearchParams] = useSearchParams()
+  // /book?color=blue
+  const color = searchParams.get('color')
+  // console.log(Object.fromEntries(searchParams.entries()))
   const [book, setBook] = useState<Book>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>()
@@ -34,6 +38,10 @@ export default function Book() {
     return () => console.log("Cleanup Book component")
   }, [id])
 
+  useEffect(() => {
+    console.log("Color changed:", color)
+  }, [color])
+
   if (loading) {
     return <div className="p-6">Chargement...</div>
   }
@@ -49,6 +57,34 @@ export default function Book() {
   return book && (
     <>
       <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">{book.title}</h1>
+
+      <input
+        value={color ?? ''}
+        type="text"
+        name="color"
+        className="border border-gray-300 rounded-md py-1 px-2 w-full"
+        onChange={(event) => {
+          setSearchParams(searchParams => {
+            searchParams.set('color', event.target.value)
+            return searchParams
+          })
+        }}
+      />
+
+      <input
+        value={searchParams.get('a') ?? ''}
+        type="text"
+        name="a"
+        className="border border-gray-300 rounded-md py-1 px-2 w-full"
+        onChange={(event) => {
+          setSearchParams(searchParams => {
+            searchParams.set('a', event.target.value)
+            return searchParams
+          })
+        }}
+      />
+
+      <h2>{color}</h2>
 
       <div className="p-6 bg-white rounded-lg shadow">
         {book.image && (
