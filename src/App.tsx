@@ -3,6 +3,7 @@ import Book, { type Book as BookType } from './Book'
 import Button from './Button'
 import BookForm from './BookForm'
 import axios from 'axios'
+import RecapUseEffect from './RecapUseEffect'
 
 let nextId = 11
 export const BOOKS = [
@@ -125,8 +126,8 @@ function App() {
   const [date, setDate] = useState(new Date())
   useEffect(() => {
     const timer = setInterval(() => {
-      setDate(new Date())
-      console.log('Tick', new Date())
+      // setDate(new Date())
+      // console.log('Tick', new Date())
     }, 1000)
 
     return () => clearInterval(timer) // fonction appelée quand le composant est détruit
@@ -210,6 +211,8 @@ function App() {
             onSave={handleAddBook}
           />
         </div>}
+
+        <RecapUseEffect />
       </div>
     </div>
   )
