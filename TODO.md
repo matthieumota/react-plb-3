@@ -1,0 +1,6 @@
+- On veut creer une route /livre/1 (le 1 est dynamique) X
+- La route sera lié à un composant X
+- Sur ce composant, il faudra trouver un moyen de récupérer (hook) le paramètre de la route (1 ou 2 par exemple) X
+- Quand on l'a, on peut fetch les données du livre sur l'API (http://localhost:3000/books/1) X
+- Ajouter un lien sur la liste des livres X
+- Ajouter un bouton suivant sur le livre 1 pour aller sur le livre 2, est-ce que ca fonctionne ? X
