@@ -85,6 +85,8 @@ let didInit = false
 
 function Home() {
   const [books, setBooks] = useState<BookType[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string>()
   const [selectedBook, setSelectedBook] = useState<BookType>()
   const [showForm, setShowForm] = useState(false)
   const [newBook, setNewBook] = useState<BookType>({
@@ -98,9 +100,18 @@ function Home() {
   const count = books.length
 
   const loadBooks = async () => {
+    setLoading(true)
+
     await new Promise(resolve => setTimeout(resolve, 500))
-    const response = await axios.get('http://localhost:3000/books')
-    setBooks(response.data)
+
+    try {
+      const response = await axios.get('http://localhost:3000/books')
+      setBooks(response.data)
+    } catch {
+      setError('API non disponible')
+    }
+
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -185,6 +196,16 @@ function Home() {
           />
         </div>
       </div>}
+
+      {loading && (
+        <div className="animate-spin rounded-full h-8 w-8 border-t border-b border-blue-500 mx-auto my-16"></div>
+      )}
+
+      {error && (
+        <p className="bg-red-100 text-red-500 p-4">
+          {error}
+        </p>
+      )}
 
       <div className="grid md:grid-cols-4 gap-4">
         {books.map((book) =>
