@@ -1,8 +1,11 @@
 import { NavLink, Outlet } from "react-router"
 import { useAuth } from "./contexts/UserContext"
+import { useThemeStore } from "./stores/useThemeStore"
+import Button from "./Button"
 
 function App() {
   const { user, setUser } = useAuth()
+  const { theme, toggleTheme } = useThemeStore()
 
   return (
     <div className="bg-gray-100 min-h-screen p-4">
@@ -45,6 +48,10 @@ function App() {
               Login
             </button>
           )}
+
+          <Button onClick={toggleTheme}>
+            {theme === 'light' ? 'dark' : 'light'} theme
+          </Button>
         </div>
 
         <Outlet />
