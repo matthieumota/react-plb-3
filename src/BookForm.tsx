@@ -2,7 +2,7 @@ import { type FormEvent, useState } from 'react'
 import { type Book } from './Book'
 import Button from './Button'
 import clsx from 'clsx'
-import { AUTHORS } from './App'
+import { AUTHORS } from './Home'
 
 type BookFormProps = {
   book: Book

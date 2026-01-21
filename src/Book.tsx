@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import Button from './Button'
-import { AUTHORS } from './App'
+import { AUTHORS } from './Home'
 import { cn } from './utils'
 
 export type Book = {
