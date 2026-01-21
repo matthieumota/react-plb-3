@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import Button from './Button'
+import NavLinkButton from './NavLinkButton'
 import { AUTHORS } from './Home'
 import { cn } from './utils'
 
@@ -181,6 +182,7 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
           <Button title="Modifier" onClick={toggleEdit}>
             Modifier
           </Button>
+          <NavLinkButton to={`/livre/${book.id}`}>Détails</NavLinkButton>
         </div>
       </div>
     </div>
