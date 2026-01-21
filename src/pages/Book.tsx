@@ -7,25 +7,32 @@ import type { Book } from "../Book"
 export default function Book() {
   const { id } = useParams()
   const [book, setBook] = useState<Book>()
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>()
+  const [loaded, setLoaded] = useState(false)
 
-  useEffect(() => {
-    const fetchBook = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/books/${id}`)
-        setBook(response.data)
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status !== 404) {
-          setError("Erreur lors du chargement du livre")
-        }
+  const fetchBook = async () => {
+    setLoading(true) // rendering loading state
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500))
+      const response = await axios.get(`http://localhost:3000/books/${id}`)
+      setBook(response.data)
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status !== 404) {
+        setError("Erreur lors du chargement du livre")
       }
-
-      setLoading(false)
     }
 
+    setLoading(false) // rendering loading state
+    setLoaded(true)
+  }
+
+  useEffect(() => {
     fetchBook()
-  }, [])
+
+    return () => console.log("Cleanup Book component")
+  }, [id])
 
   if (loading) {
     return <div className="p-6">Chargement...</div>
@@ -35,11 +42,11 @@ export default function Book() {
     return <div className="p-6 text-red-500">{error}</div>
   }
 
-  if (!book) {
+  if (!book && loaded) {
     return <div className="p-6">Livre non trouvé</div>
   }
 
-  return (
+  return book && (
     <>
       <h1 className="text-3xl font-bold text-center text-blue-500 mb-6">{book.title}</h1>
 
@@ -55,7 +62,7 @@ export default function Book() {
         <p className="text-lg text-gray-600 mb-2">Auteur: {book.author}</p>
         <p className="text-sm text-gray-500">Publié en {book.year}</p>
 
-        <NavLinkButton to={`/livre/2`}>
+        <NavLinkButton to={`/livre/${Number(id) + 1}`}>
           Livre suivant
         </NavLinkButton>
       </div>
