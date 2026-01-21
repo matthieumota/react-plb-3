@@ -3,6 +3,7 @@ import Button from './Button'
 import NavLinkButton from './NavLinkButton'
 import { AUTHORS } from './Home'
 import { cn } from './utils'
+import { useAuth } from './contexts/UserContext'
 
 export type Book = {
   id: number
@@ -25,6 +26,8 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
   const [editMode, setEditMode] = useState(false)
   const [localBook, setLocalBook] = useState(book)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const { user } = useAuth()
 
   // Si on veut garder l'etat editMode et synchroniser localBook
   if (book !== localBook) {
@@ -176,12 +179,14 @@ function Book({ book, active = true, onSelect, onRemove, onSave }: BookProps) {
             ❤️‍🔥
             {like > 0 && <>({like})</>}
           </Button>
-          <Button title="Supprimer" onClick={handleRemove} className="bg-red-500 hover:bg-red-800">
-            🗑️
-          </Button>
-          <Button title="Modifier" onClick={toggleEdit}>
-            Modifier
-          </Button>
+          {user && <>
+            <Button title="Supprimer" onClick={handleRemove} className="bg-red-500 hover:bg-red-800">
+              🗑️
+            </Button>
+            <Button title="Modifier" onClick={toggleEdit}>
+              Modifier
+            </Button>
+          </>}
           <NavLinkButton to={`/livre/${book.id}`}>Détails</NavLinkButton>
         </div>
       </div>
